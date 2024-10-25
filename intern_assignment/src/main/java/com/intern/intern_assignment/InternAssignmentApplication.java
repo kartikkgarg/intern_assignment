@@ -9,6 +9,7 @@ public class InternAssignmentApplication {
     public static void main(String[] args) {
         SpringApplication.run(InternAssignmentApplication.class, args);
 		System.out.println("kartik");
+        // hello
         // System.out.println("KK");  // This should print when the application starts
     }
 }

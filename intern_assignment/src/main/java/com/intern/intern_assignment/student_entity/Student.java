@@ -112,9 +112,12 @@
 
 package com.intern.intern_assignment.student_entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.intern.intern_assignment.course_entity.Course; // Import Course class
 
 import jakarta.persistence.*;
+
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -141,12 +144,15 @@ public class Student {
         name = "course_students",
         joinColumns = @JoinColumn(name = "student_id"),
         inverseJoinColumns = @JoinColumn(name = "course_id"))
-    private Set<Course> courses = new HashSet<>();
+        private Set<Course> courses = new HashSet<>();
     // Getters, setters, constructor, etc.
 
     
     public Student() {
     }
+    // @JsonIgnore
+    // private Set<Course> course; // For Student class
+
     
 
     public Student(String firstname, String lastname, String email) {
@@ -188,31 +194,51 @@ public class Student {
         this.email = email;
     }
 
-    public List<Course> getCourses() {
-        return (List<Course>) courses;
-    }
 
+    // public List<Course> getCourses() {
+        // return new ArrayList<>(courses);
+    // }
+
+// Set course list by converting to a Set internally
     public void setCourses(List<Course> courses) {
-        this.courses = (Set<Course>) courses;
+        this.courses = new HashSet<>(courses);
     }
 
-    // Method to enroll in a course
+    // Convert the courses Set to a List for retrieval in Controller
+    public List<Course> getCourses() {
+    return new ArrayList<>(courses);
+}
+
+// Enroll method
     public void enrollInCourse(Course course) {
         this.courses.add(course);
-        course.getStudents().add(this);
-    
+    course.getStudents().add(this);
+
+    // public List<Course> getCourses() {
+        // return (List<Course>) courses;
     }
+
+    // public void setCourses(List<Course> courses) {
+        // this.courses = (Set<Course>) courses;
+    
+
+    // Method to enroll in a course
+    // public void enrollInCourse(Course course) {
+        // this.courses.add(course);
+        // course.getStudents().add(this);
+    
+    
 
     @Override
     public String toString() {
         return "Student [id=" + student_ID + ", firstname=" + firstname + ", lastname=" + lastname + ", email=" + email + "]";
     }
 
-
+}
 
     // @ManyToMany(mappedBy = "students") // Make sure this matches the field name in Course class
     // private Set<Course> courses = new HashSet<>();
 
     // Getters, setters, constructor, etc.
     
-}
+

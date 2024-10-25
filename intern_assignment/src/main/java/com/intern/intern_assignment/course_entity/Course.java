@@ -1,4 +1,5 @@
 package com.intern.intern_assignment.course_entity;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -130,9 +131,7 @@ public class Course {
 
     @ManyToMany(mappedBy = "courses")
     private Set<Student> students = new HashSet<>();
-    public Set<Student> getStudents() {
-        return students;
-    }
+    
     
     // Default constructor
     public Course() {}
@@ -160,12 +159,13 @@ public class Course {
         this.courseName = course_Name;
     }
 
-    // public List<Student> getStudents() {
-        // return (List<Student>) students;
-    // }
+    public List<Student> getStudents() {
+        return new ArrayList<>(students);
+    }
 
     public void setStudents(List<Student> students) {
-        this.students = (Set<Student>) students;
+        this.students = new HashSet<>(students);
+
     }
 
     @Override

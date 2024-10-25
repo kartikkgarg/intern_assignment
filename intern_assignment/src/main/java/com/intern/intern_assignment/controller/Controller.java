@@ -138,10 +138,10 @@ public class Controller {
     //             // return null;
     //         }
     
-            @PutMapping("/courses/update/{id}")
-            public Course updateCourse(@PathVariable int id, @RequestBody Course updatedCourse) {
-                Course course = courseRepo.findById(id)
-                        .orElseThrow(() -> new RuntimeException("Course not found with id " + id));
+    @PutMapping("/courses/update/{id}")
+        public Course updateCourse(@PathVariable int id, @RequestBody Course updatedCourse) {
+            Course course = courseRepo.findById(id)
+                .orElseThrow(() -> new RuntimeException("Course not found with id " + id));
                 
                 // Update course details with data from the request body
                 if (updatedCourse.getCourseName() != null) {
@@ -168,10 +168,10 @@ public class Controller {
 
             @GetMapping("/courses/{courseId}/students")
             public List<Student> getStudentsByCourseId(@PathVariable int courseId) {
-            Course course = courseRepo.findById(courseId)
-            .orElseThrow(() -> new RuntimeException("Course not found with id " + courseId));
+                Course course = courseRepo.findById(courseId)
+                    .orElseThrow(() -> new RuntimeException("Course not found with id " + courseId));
     
-            return new ArrayList<>(course.getStudents()); // Convert Set to List
+                return new ArrayList<>(course.getStudents()); // Convert Set to List
 }
 
 

@@ -6,6 +6,13 @@ import java.util.Set;
 
 import com.intern.intern_assignment.student_entity.Student;
 
+// for nesting
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import java.util.Set;
+
+
+
 // @Entity
 // public class Course {
 
@@ -128,6 +135,17 @@ public class Course {
     private int course_Id;
     @Column(name = "course name") 
     private String courseName;
+
+    
+// public class Course {
+    // other fields and annotations...
+
+    @JsonIgnore
+    // @ManyToMany(mappedBy = "courses")
+    // private Set<Student> students;
+
+    // other getters, setters, and methods...
+// }
 
     @ManyToMany(mappedBy = "courses")
     private Set<Student> students = new HashSet<>();

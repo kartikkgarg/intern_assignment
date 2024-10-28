@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.Map;
+import java.util.HashMap;
 
 import com.intern.intern_assignment.course_entity.Course;
 import com.intern.intern_assignment.coursereposiotry.coursereposiotry;
@@ -26,7 +28,9 @@ import com.intern.intern_assignment.reposiotry.reposiotry;
 // // import com.intern.intern_assignment.service.student_service;
 import com.intern.intern_assignment.student_entity.Student;
 
+// import org.hibernate.mapping.Map;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 
 
@@ -118,7 +122,8 @@ public class Controller {
     }
     @GetMapping("/courses/{id}")
     public Course getCourse(@PathVariable int id) {
-        return courseRepo.findById(id).orElse(null);}
+        return courseRepo.findById(id).get();}
+
 
     @PostMapping("/courses/add")
         public void createCourse(@RequestBody Course course) {
@@ -166,13 +171,55 @@ public class Controller {
             // .orElseThrow(() -> new RuntimeException("Course not found with id " + courseId));
             // return course.getStudents(); // Return as Set
 
-            @GetMapping("/courses/{courseId}/students")
-            public List<Student> getStudentsByCourseId(@PathVariable int courseId) {
-                Course course = courseRepo.findById(courseId)
-                    .orElseThrow(() -> new RuntimeException("Course not found with id " + courseId));
-    
-                return new ArrayList<>(course.getStudents()); // Convert Set to List
+            
+
+        @GetMapping("/courses/all-students")
+        public ResponseEntity<Map<String, List<Student>>> getAllCoursesWithStudents() {
+        List<Course> courses = courseRepo.findAll();
+        Map<String, List<Student>> courseStudentsMap = new HashMap<>();
+
+        for (Course course : courses) {
+        courseStudentsMap.put(course.getCourseName(), new ArrayList<>(course.getStudents()));
+    }
+
+        return ResponseEntity.ok(courseStudentsMap);
 }
+
+        @GetMapping("/courses/{courseId}/students")
+        public List<Student> getStudentsByCourseId(@PathVariable int courseId) {
+        Course course = courseRepo.findById(courseId)
+        .orElseThrow(() -> new RuntimeException("Course not found with id " + courseId));
+
+        return new ArrayList<>(course.getStudents()); // Convert Set to List
+
+
+
+}
+
+        @PostMapping("/students/enroll")
+        public ResponseEntity<?> enrollStudentInCourse(@RequestBody Map<String, Integer> enrollmentData) {
+        Integer studentId = enrollmentData.get("studentId");
+        Integer courseId = enrollmentData.get("courseId");
+
+        if (studentId == null || courseId == null) {
+            return ResponseEntity.badRequest().body("Both 'studentId' and 'courseId' are required.");
+    }
+
+    Student student = repo.findById(studentId)
+        .orElseThrow(() -> new RuntimeException("Student not found with id " + studentId));
+    Course course = courseRepo.findById(courseId)
+        .orElseThrow(() -> new RuntimeException("Course not found with id " + courseId));
+
+    // Enroll the student in the course
+    student.getCourses().add(course);
+    course.getStudents().add(student);
+
+    repo.save(student); // Save to update the association in the database
+
+    return ResponseEntity.ok(student);
+}
+
+
 
 
             @PostMapping("/students/{studentId}/enroll/{courseId}")
@@ -188,10 +235,30 @@ public class Controller {
             repo.save(student); // Save to update the association in the database
             return student;
 }
+            @DeleteMapping("/courses/remove/{courseId}")
+            public ResponseEntity<Map<String, Object>> deleteCourseAndReturnAffectedStudents(@PathVariable int courseId) {
+            Course course = courseRepo.findById(courseId)
+            .orElseThrow(() -> new RuntimeException("Course not found with id " + courseId));
 
+    // Retrieve the list of students who will be affected
+            Set<Student> students = (Set<Student>) course.getStudents();
+
+    // Convert Set to List for a cleaner JSON response if needed
+    List<Student> studentsList = new ArrayList<>(students);
+
+    // Prepare the response map
+    Map<String, Object> response = new HashMap<>();
+    response.put("deletedCourseId", courseId);
+    response.put("affectedStudents", studentsList);
+
+    // Delete the course
+    courseRepo.delete(course);
+
+    return ResponseEntity.ok(response);
 }
 
+
+}
     // @GetMapping("/")
     // public String home() {
         // return "Welcome to the Student Management System!";
-

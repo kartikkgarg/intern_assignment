@@ -22,8 +22,6 @@ import com.intern.intern_assignment.coursereposiotry.coursereposiotry;
 // // import com.intern.intern_assignment.STD_data.studentdata;
 // // import com.intern.intern_assignment.STD_data.studentsavedata;
 // // import com.intern.intern_assignment.course_entity.Course;
-// // // import com.intern.intern_assignment.Course;
-// // import com.intern.intern_assignment.coursereposiotry.coursereposiotry;
 import com.intern.intern_assignment.reposiotry.reposiotry;
 // // import com.intern.intern_assignment.service.student_service;
 import com.intern.intern_assignment.student_entity.Student;
@@ -32,32 +30,10 @@ import com.intern.intern_assignment.student_entity.Student;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
-
-
-
-// //     @PostMapping(path = "/save")
-// //     public String postMethodName(@RequestBody String entity) {
-
-        
-// //         return entity;
-// //     }
     
 
 // //     @Autowired
 // //     private student_service student_service;
-
-// //     public String savestudent(@RequestBody studentsavedata studentsavedata)
-// //     {
-// //         String stname= student_service.addstudent(studentsavedata);
-// //         return stname;
-// //     } 
-
-// //     public List<Student>getallstudents(){
-// //         List<Student>students= repo.findAll();
-// //             return students;
-
-
-// //     }
 
 
 // package com.intern.intern_assignment.controller;
@@ -212,7 +188,7 @@ public class Controller {
 
     // Enroll the student in the course
     student.getCourses().add(course);
-    course.getStudents().add(student);
+    // course.getStudents().add(student);
 
     repo.save(student); // Save to update the association in the database
 

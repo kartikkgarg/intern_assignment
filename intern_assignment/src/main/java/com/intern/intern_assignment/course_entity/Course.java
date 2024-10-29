@@ -13,113 +13,11 @@ import java.util.Set;
 
 
 
-// @Entity
-// public class Course {
-
-//     @Id
-//     @GeneratedValue(strategy = GenerationType.IDENTITY)
-//     private int id;
-
-//     private String courseNumber;
-//     private String courseName;
-
-//     @ManyToMany(mappedBy = "courses")
-//     private Set<Student> students = new HashSet<>();
-
-//     // Default constructor
-//     public Course() {}
-
-//     // Parameterized constructor, getters, and setters
-//     public Course(String courseNumber, String courseName) {
-//         this.courseNumber = courseNumber;
-//         this.courseName = courseName;
-//     }
-
-//     // Getters and setters
-//     public int getId() {
-//         return id;
-//     }
-
-//     public void setId(int id) {
-//         this.id = id;
-//     }
-
-//     public String getCourseNumber() {
-//         return courseNumber;
-//     }
-
-//     public void setCourseNumber(String courseNumber) {
-//         this.courseNumber = courseNumber;
-//     }
-
-//     public String getCourseName() {
-//         return courseName;
-//     }
-
-//     public void setCourseName(String courseName) {
-//         this.courseName = courseName;
-//     }
-
-//     public Set<Student> getStudents() {
-//         return students;
-//     }
-
-//     public void setStudents(Set<Student> students) {
-//         this.students = students;
-//     }
-// }
-
-// import org.hibernate.mapping.List;
-
-// @Entity
-// public class Course {
-//     @Id
-//     @GeneratedValue(strategy = GenerationType.IDENTITY)
-//     private Long courseId;
-    
-//     private String courseName;
-    
-//     @ManyToMany(mappedBy = "courses")
-//     private List<Student> students;
-
-//     public Long getCourseId() {
-//         return courseId;
-//     }
-
-//     public void setCourseId(Long courseId) {
-//         this.courseId = courseId;
-//     }
-
-//     public String getCourseName() {
-//         return courseName;
-//     }
-
-//     public void setCourseName(String courseName) {
-//         this.courseName = courseName;
-//     }
-
-//     public List<Student> getStudents() {
-//         return students;
-//     }
-
-//     public void setStudents(List<Student> students) {
-//         this.students = students;
-//     }
-//     public Course() {}
-
-//     public Course(String courseNumber, String courseName) {
-//                 this.courseId = courseId;
-//                 this.courseName = courseName;
-//     }
-
-
-//     // Other fields, constructors, getters, setters
-// }
-// package com.intern.intern_assignment.course_entity;
 
 import java.util.List;
 import com.intern.intern_assignment.student_entity.Student;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -146,8 +44,9 @@ public class Course {
 
     // other getters, setters, and methods...
 // }
+    
 
-    @ManyToMany(mappedBy = "courses")
+    @ManyToMany(mappedBy = "courses", cascade = CascadeType.PERSIST)
     private Set<Student> students = new HashSet<>();
     
     
